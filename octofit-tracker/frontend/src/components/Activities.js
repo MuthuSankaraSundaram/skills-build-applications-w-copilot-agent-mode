@@ -1,37 +1,40 @@
-import React, { useEffect, useState } from "react";
-import Table from "react-bootstrap/Table";
+import React, { useState, useEffect } from 'react';
 
-const Activities = () => {
+const baseUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+
+function Activities() {
   const [items, setItems] = useState([]);
 
-  const apiUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api/activities/`;
-
   useEffect(() => {
-    console.log("Activities API URL:", apiUrl);
-
-    fetch(apiUrl)
+    fetch(`${baseUrl}/activities/`)
       .then(res => res.json())
       .then(data => {
-        console.log("Activities API Data:", data);
-        setItems(data.results || data);
+        const results = data.results ? data.results : data;
+        console.log("Activities data:", results);
+        setItems(results);
       })
       .catch(err => console.error(err));
-  }, [apiUrl]);
+  }, []);
 
   return (
     <div>
       <h2>Activities</h2>
-      <Table striped bordered hover>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            {items.length > 0 && Object.keys(items[0]).map(key => <th key={key}>{key}</th>)}
+          </tr>
+        </thead>
         <tbody>
-          {items.map((item, idx) => (
-            <tr key={idx}>
-              <td>{JSON.stringify(item)}</td>
+          {items.map((item, index) => (
+            <tr key={index}>
+              {Object.values(item).map((val, i) => <td key={i}>{val}</td>)}
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
-};
+}
 
 export default Activities;

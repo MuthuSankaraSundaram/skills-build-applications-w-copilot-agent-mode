@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 
 const baseUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
 
-export default function Workouts() {
+function Workouts() {
   const [items, setItems] = useState([]);
 
   useEffect(() => {
     fetch(`${baseUrl}/workouts/`)
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        const items = data.results ? data.results : data;
-        console.log('Workouts:', items);
-        setItems(items);
+        const results = data.results ? data.results : data;
+        console.log("Workouts data:", results);
+        setItems(results);
       })
       .catch(err => console.error(err));
   }, []);
@@ -19,7 +19,22 @@ export default function Workouts() {
   return (
     <div>
       <h2>Workouts</h2>
-      <pre>{JSON.stringify(items, null, 2)}</pre>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            {items.length > 0 && Object.keys(items[0]).map(key => <th key={key}>{key}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, index) => (
+            <tr key={index}>
+              {Object.values(item).map((val, i) => <td key={i}>{val}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
+
+export default Workouts;
