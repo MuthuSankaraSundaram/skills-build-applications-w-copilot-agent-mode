@@ -1,25 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
-function Leaderboard() {
-  // Step 1: Create state to store fetched data
+const baseUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+
+export default function Leaderboard() {
   const [items, setItems] = useState([]);
 
-  // Step 2: Base URL for backend API
-  const baseUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
-
-  // Step 3: Fetch data when component mounts
   useEffect(() => {
     fetch(`${baseUrl}/leaderboard/`)
       .then(response => response.json())
       .then(data => {
-        const list = data.results ? data.results : data; // handle paginated or plain array
-        console.log(list); // log data
-        setItems(list);     // update state
+        const items = data.results ? data.results : data;
+        console.log('Leaderboard:', items);
+        setItems(items);
       })
       .catch(err => console.error(err));
-  }, []); // empty array = run once on mount
+  }, []);
 
-  // Step 4: Render the data
   return (
     <div>
       <h2>Leaderboard</h2>
@@ -27,5 +23,3 @@ function Leaderboard() {
     </div>
   );
 }
-
-export default Leaderboard;
