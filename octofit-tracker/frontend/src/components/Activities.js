@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 
 const Activities = () => {
   const [items, setItems] = useState([]);
-  const baseUrl = `https://${process.env.REACT_APP_CODESPACE_NAME}-8000.app.github.dev/api`;
+  const baseUrl = "http://127.0.0.1:8000/api";
+
 
   useEffect(() => {
     fetch(`${baseUrl}/activities/`)
